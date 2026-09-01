@@ -163,7 +163,7 @@ export function validateDomainUrl(url: string, allowedDomains: string[], label: 
   const lowered = url.toLowerCase();
   const schemeEnd = lowered.indexOf("://") + 3;
   const hostAndRest = lowered.slice(schemeEnd);
-  let host = hostAndRest.split("/")[0];
+  let host = hostAndRest.split("/")[0] ?? "";
   if (host.startsWith("www.")) host = host.slice(4);
   if (!allowedDomains.includes(host)) {
     return `${label} must be hosted on one of ${allowedDomains.join(", ")}`;
