@@ -139,13 +139,14 @@ export function validateSafeUrl(url: string, label: string): string | null {
   const schemeEnd = url.indexOf("://") + 3;
   const rest = url.slice(schemeEnd);
   if (rest === "" || rest[0] === "/" || rest[0] === ".") return `${label} must include a host`;
-  const hostPort = rest.split("/")[0].split("?")[0].split("#")[0];
+  const hostPort = (rest.split("/")[0] ?? "").split("?")[0] ?? "";
+  const hostPortClean = hostPort.split("#")[0] ?? "";
   let host: string;
-  if (hostPort.startsWith("[")) {
-    const end = hostPort.indexOf("]");
-    host = end !== -1 ? hostPort.slice(0, end + 1) : hostPort;
+  if (hostPortClean.startsWith("[")) {
+    const end = hostPortClean.indexOf("]");
+    host = end !== -1 ? hostPortClean.slice(0, end + 1) : hostPortClean;
   } else {
-    host = hostPort.split(":")[0];
+    host = hostPortClean.split(":")[0] ?? "";
   }
   if (host === "") return `${label} must include a host`;
   const hostError = requirePublicHost(host);
